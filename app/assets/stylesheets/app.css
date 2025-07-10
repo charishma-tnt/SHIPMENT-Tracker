@@ -9,7 +9,7 @@ body {
   line-height: 1.6;
 }
 
-/* Headings */
+
 h1, h2, h3, h4, h5, h6 {
   color: #0c5db9;
   margin-bottom: 1rem;
@@ -28,7 +28,7 @@ a:hover {
 /* Buttons */
 button, .button {
   background-color: #007bff;
-  color: white;
+  color: rgb(208, 163, 163);
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 4px;

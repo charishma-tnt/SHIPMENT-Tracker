@@ -1,0 +1,55 @@
+<div class="shipment-stats-chart-container" style="max-width: 600px; margin: 2rem auto;">
+  <canvas id="shipmentStatsChart" width="600" height="400"></canvas>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const ctx = document.getElementById('shipmentStatsChart').getContext('2d');
+    const shipmentStatsChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Total Shipments', 'In Transit', 'Pending', 'Delivered'],
+        datasets: [{
+          label: 'Shipment Counts',
+          data: [
+            <%= @total_shipments || 0 %>,
+            <%= @in_transit_count || 0 %>,
+            <%= @pending_count || 0 %>,
+            <%= @delivered_count || 0 %>
+          ],
+          backgroundColor: [
+            'rgba(54, 162, 235, 0.7)',
+            'rgba(255, 206, 86, 0.7)',
+            'rgba(255, 99, 132, 0.7)',
+            'rgba(75, 192, 192, 0.7)'
+          ],
+          borderColor: [
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(255, 99, 132, 1)',
+            'rgba(75, 192, 192, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            precision: 0
+          }
+        },
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false
+          },
+          title: {
+            display: true,
+            text: 'Shipment Overview'
+          }
+        }
+      }
+    });
+  });
+</script>

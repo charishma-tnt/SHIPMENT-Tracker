@@ -5,7 +5,8 @@ class DeliveryPartnersController < ApplicationController
 
   def show
     if current_user.delivery_partner.present? && @delivery_partner == current_user.delivery_partner
-      @shipments = Shipment.where(delivery_partner_id: current_user.delivery_partner.id)
+      @shipments = Shipment.where(delivery_partner_id: current_user.delivery_partner.id).where.not(status: Shipment::STATUS_VALUES[:delivered])
+      @delivered_shipments = Shipment.where(delivery_partner_id: current_user.delivery_partner.id, status: Shipment::STATUS_VALUES[:delivered])
     else
       redirect_to root_path, alert: "Access denied."
     end

@@ -1,145 +1,158 @@
-<div class="min-h-screen flex">
+<%= stylesheet_link_tag 'dashboard', media: 'all', 'data-turbolinks-track': 'reload' %>
+<div class="min-h-screen flex dashboard-body">
   <!-- Sidebar -->
-  <aside class="w-64 bg-white shadow-lg px-6 py-8">
-    <h2 class="text-3xl font-extrabold mb-8 text-blue-600 animate-bounce transition-all duration-700 uppercase">Shipment Tracker</h2>
-    <nav class="space-y-6">
-      <%= link_to "Dashboard", dashboard_shipments_path, class: "block w-full text-left px-6 py-4 rounded-lg bg-blue-100 text-blue-700 font-bold text-lg hover:shadow-lg transition-all duration-200" %>
-      <%= link_to "My Shipments", shipments_path, class: "block w-full text-left px-6 py-4 rounded-lg bg-gray-100 text-gray-800 font-semibold text-lg hover:bg-blue-50 hover:shadow-lg transition-all duration-200" %>
-      <%= link_to "Create Shipment", new_shipment_path, class: "block w-full text-left px-6 py-4 rounded-lg bg-green-100 text-green-700 font-semibold text-lg hover:bg-green-200 hover:shadow-lg transition-all duration-200" %>
-      <%= link_to "Track Shipment", track_shipments_path, class: "block w-full text-left px-6 py-4 rounded-lg bg-yellow-100 text-yellow-700 font-semibold text-lg hover:bg-yellow-200 hover:shadow-lg transition-all duration-200" %>
+  <aside class="sidebar">
+    <h2>Shipment Tracker</h2>
+    <nav>
+      <%= link_to "Dashboard", dashboard_shipments_path, class: "nav-link active" %>
+      <%= link_to "My Shipments", shipments_path, class: "nav-link" %>
+      <%= link_to "Create Shipment", new_shipment_path, class: "nav-link create" %>
+      <%= link_to "Track Shipment", track_shipments_path, class: "nav-link track" %>
     </nav>
+    <footer>
+      &copy; <%= Time.current.year %> Shipment Tracker
+    </footer>
   </aside>
 
   <!-- Main content -->
-  <div class="flex-1 flex flex-col items-center justify-center">
-    <div class="bg-white rounded-xl shadow-lg border border-gray-300 p-10 w-full max-w-4xl">
-      <!-- Header -->
-      <header class="flex justify-end items-center mb-8">
-        <div class="flex items-center space-x-4">
-          <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl">
-            <%= current_user.email.to_s.first.upcase %>
-          </div>
-          <div class="text-right">
-            <p class="font-bold"><%= current_user.email %></p>
-            <p class="text-sm text-green-500">
-              <% if current_user.customer? %>Customer
-              <% elsif current_user.delivery_partner? %>Delivery Partner
-              <% elsif current_user.admin? %>Admin
-              <% end %>
-            </p>
-            <p class="text-xs text-green-500">Last login: Today</p>
-          </div>
+  <main class="main-content">
+    <header class="header">
+      <div class="user-info">
+        <div class="user-avatar">
+          <%= current_user.email.to_s.first.upcase %>
         </div>
-      </header>
-
-      <!-- Main Content -->
-      <main>
-        <h1 class="text-4xl font-bold mb-8 text-blue-700">
-          Welcome back, <%= current_user.email.present? ? current_user.email.split('@').first.capitalize : "User" %>!
-        </h1>
-
-        <% if current_user.customer? %>
-          <p class="mb-8 text-gray-600 text-lg">Here's an overview of your shipments.</p>
-        <% end %>
-
-        <div data-controller="shipment-stats" class="flex space-x-6 mb-10">
-          <div class="bg-white rounded-lg shadow shipment-card p-6 text-center flex-1 border border-gray-300">
-            <p class="text-sm text-gray-500 mb-2">Total Shipments</p>
-            <p class="text-3xl font-extrabold text-blue-600"><%= @total_shipments %></p>
-          </div>
-          <div class="bg-white rounded-lg shadow shipment-card p-6 text-center flex-1 border border-gray-300">
-            <p class="text-sm text-gray-500 mb-2">In Transit</p>
-            <p class="text-3xl font-extrabold text-blue-500"><%= @in_transit_count %></p>
-          </div>
-          <div class="bg-white rounded-lg shadow shipment-card p-6 text-center flex-1 border border-gray-300">
-            <p class="text-sm text-gray-500 mb-2">Pending</p>
-            <p class="text-3xl font-extrabold text-yellow-500"><%= @pending_count %></p>
-          </div>
-          <div class="bg-white rounded-lg shadow shipment-card p-6 text-center flex-1 border border-gray-300">
-            <p class="text-sm text-gray-500 mb-2">Delivered</p>
-            <p class="text-3xl font-extrabold text-green-600"><%= @delivered_count %></p>
-          </div>
+        <div class="user-details">
+          <p class="email"><%= current_user.email %></p>
+          <p class="role">
+            <% if current_user.customer? %>Customer
+            <% elsif current_user.delivery_partner? %>Delivery Partner
+            <% elsif current_user.admin? %>Admin
+            <% end %>
+          </p>
         </div>
-
-        <div class="mb-10">
-          <%= link_to "View My Shipments", shipments_path, class: "inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition" %>
-        </div>
-
-        <% unless current_user.customer? %>
-          <section class="bg-white rounded-lg shadow p-6 mb-10">
-            <div class="flex justify-between items-center mb-6">
-              <h2 class="text-2xl font-semibold">Recent Activity</h2>
-              <%= link_to "View All", shipments_path, class: "text-blue-600 hover:underline text-sm" %>
-            </div>
-            <table class="min-w-full divide-y divide-blue-300">
-              <thead class="bg-blue-700">
-                <tr>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Shipment ID</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Source</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Target</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Status</th>
-                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Last Updated</th>
-                </tr>
-              </thead>
-              <tbody class="bg-blue-50 divide-y divide-blue-300">
-                <% @recent_shipments.each_with_index do |shipment, index| %>
-                  <tr class="<%= index.even? ? 'bg-blue-100' : 'bg-blue-50' %>">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-900"><%= shipment.id %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-700"><%= shipment.source %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-700"><%= shipment.target %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-700"><%= shipment.status_humanize %></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-700"><%= shipment.updated_at.strftime("%B %d, %Y at %I:%M %p") %></td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          </section>
-        <% end %>
-
-        <div class="flex flex-col sm:flex-row gap-4">
-          <%= link_to new_shipment_path, class: "flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg text-center transition" do %>
-            Create New Shipment
-          <% end %>
-        </div>
-
-        <section class="mt-8">
-          <p class="text-lg font-semibold mb-4">Track your shipments using the tracking ID!</p>
-          <%= render "tracking_form" %>
-        </section>
-      </main>
-    </div>
-    <footer class="bg-blue-300 py-4 mt-8 w-full rounded-b-xl shadow">
-      <div class="container mx-auto text-left">
-        <p class="text-center">Follow us on:</p>
-        <div class="flex justify-center space-x-4 mt-2">
-          <%= link_to "https://www.facebook.com", target: "_blank", class: "text-blue-600 hover:text-blue-800" do %>
-            <i class="fab fa-facebook-f"></i>
-          <% end %>
-          <%= link_to "https://www.twitter.com", target: "_blank", class: "text-blue-400 hover:text-blue-600" do %>
-            <i class="fab fa-twitter"></i>
-          <% end %>
-          <%= link_to "https://www.instagram.com", target: "_blank", class: "text-pink-500 hover:text-pink-700" do %>
-            <i class="fab fa-instagram"></i>
-          <% end %>
-          <%= link_to "https://www.linkedin.com", target: "_blank", class: "text-blue-700 hover:text-blue-900" do %>
-            <i class="fab fa-linkedin-in"></i>
-          <% end %>
-        </div>
-        <p class="text-center text-sm text-gray-600 mt-2">
-        <div class="flex justify-center space-x-4 mt-2">
-          <!-- Social media links omitted for brevity -->
-        </div>
-        <p class="text-center text-xs text-gray-700 mt-4">
-          &copy; <%= Time.current.year %> Shipment Tracker. All rights reserved.
-        </p>
       </div>
-    </footer>
-    <style>
-      body {
-        background: linear-gradient(135deg,rgb(118, 126, 155) 0%, #8ec5fc 100%);
-        min-height: 100vh;
-        font-family: 'Segoe UI', 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
-      }
-    </style>
-  </div>
+      <div>
+        <%= link_to "View My Shipments", shipments_path, class: "button-primary" %>
+      </div>
+    </header>
+
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-info">
+          <p class="stat-label">Total Shipments</p>
+          <p class="stat-value"><%= @total_shipments %></p>
+        </div>
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7M16 3v4M8 3v4m-5 4h18" />
+          </svg>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <p class="stat-label">In Transit</p>
+          <p class="stat-value"><%= @in_transit_count %></p>
+        </div>
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-6a2 2 0 012-2h6" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h7l-1 5h-6a2 2 0 01-2-2v-3z" />
+            <circle cx="7" cy="17" r="2" />
+            <circle cx="17" cy="17" r="2" />
+          </svg>
+        </div>
+      </div>
+      <div class="stat-card pending">
+        <div class="stat-info">
+          <p class="stat-label">Pending</p>
+          <p class="stat-value"><%= @pending_count %></p>
+        </div>
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" />
+            <circle cx="12" cy="12" r="10" />
+          </svg>
+        </div>
+      </div>
+      <div class="stat-card delivered">
+        <div class="stat-info">
+          <p class="stat-label">Delivered</p>
+          <p class="stat-value"><%= @delivered_count %></p>
+        </div>
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <% if @delivered_shipments.any? %>
+      <section class="table-section">
+        <h2>Delivered Shipments</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Shipment ID</th>
+              <th>Destination</th>
+              <th>Status</th>
+              <th>Updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @delivered_shipments.each_with_index do |shipment, index| %>
+              <tr class="<%= index.even? ? 'even' : 'odd' %>">
+                <td><%= shipment.id %></td>
+                <td><%= shipment.target %></td>
+                <td><%= shipment.status_humanize %></td>
+                <td><%= shipment.updated_at.strftime("%B %d, %Y at %I:%M %p") %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </section>
+    <% end %>
+
+    <% unless current_user.customer? %>
+      <section class="table-section">
+        <div class="flex justify-between items-center mb-6">
+          <h2>Recent Activity</h2>
+          <%= link_to "View All", shipments_path, class: "text-blue-600 hover:underline text-sm" %>
+        </div>
+        <table>
+          <thead>
+            <tr class="bg-blue-600 text-white uppercase text-sm">
+              <th>Shipment ID</th>
+              <th>Source</th>
+              <th>Target</th>
+              <th>Status</th>
+              <th>Last Updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @recent_shipments.each_with_index do |shipment, index| %>
+              <tr class="<%= index.even? ? 'even' : 'odd' %>">
+                <td class="text-blue-900 font-medium"><%= shipment.id %></td>
+                <td class="text-blue-700"><%= shipment.source %></td>
+                <td class="text-blue-700"><%= shipment.target %></td>
+                <td class="text-blue-700"><%= shipment.status_humanize %></td>
+                <td class="text-blue-700"><%= shipment.updated_at.strftime("%B %d, %Y at %I:%M %p") %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </section>
+    <% end %>
+
+    <div class="flex flex-col sm:flex-row gap-4 mb-12">
+      <%= link_to new_shipment_path, class: "create-shipment-btn" do %>
+        Create New Shipment
+      <% end %>
+    </div>
+
+    <section class="track-section">
+      <p>Track your shipments using the tracking ID!</p>
+      <%= render "tracking_form" %>
+    </section>
+  </main>
 </div>

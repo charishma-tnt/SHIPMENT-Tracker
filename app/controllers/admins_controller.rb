@@ -17,17 +17,40 @@ class AdminsController < ApplicationController
 
   def assign_shipment
     shipment = Shipment.find(params[:shipment_id])
-    delivery_partner = DeliveryPartner.find(params[:delivery_partner_id])
+    delivery_partner_id = params[:delivery_partner_id]
 
-    shipment.update(delivery_partner: delivery_partner)
-
-    # Update the User record associated with this delivery partner to keep association in sync
-    user = User.find_by(delivery_partner_id: delivery_partner.id)
-    if user.present? && user.delivery_partner != delivery_partner
-      user.update(delivery_partner: delivery_partner)
+    if delivery_partner_id.nil?
+      redirect_to admin_path, alert: "Please select a delivery partner to assign the shipment."
+      return
     end
 
-    redirect_to admin_path, notice: "Shipment ##{shipment.id} assigned to delivery partner #{delivery_partner.name}."
+    if delivery_partner_id.blank?
+      # Unassign shipment
+      if shipment.update(delivery_partner: nil)
+        redirect_to admin_path, notice: "Shipment ##{shipment.id} unassigned from any delivery partner."
+      else
+        redirect_to admin_path, alert: "Failed to unassign shipment ##{shipment.id}."
+      end
+      return
+    end
+
+    delivery_partner = DeliveryPartner.find_by(id: delivery_partner_id)
+
+    if delivery_partner.nil?
+      redirect_to admin_path, alert: "Selected delivery partner not found."
+      return
+    end
+
+    if shipment.update(delivery_partner: delivery_partner)
+      # Update the User record associated with this delivery partner to keep association in sync
+      user = User.find_by(delivery_partner_id: delivery_partner.id)
+      if user.present? && user.delivery_partner != delivery_partner
+        user.update(delivery_partner: delivery_partner)
+      end
+      redirect_to admin_path, notice: "Shipment ##{shipment.id} assigned to delivery partner #{delivery_partner.name}."
+    else
+      redirect_to admin_path, alert: "Failed to assign shipment ##{shipment.id} to delivery partner #{delivery_partner.name}."
+    end
   end
 
   private

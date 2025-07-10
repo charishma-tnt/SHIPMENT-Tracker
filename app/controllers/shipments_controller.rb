@@ -22,6 +22,12 @@ class ShipmentsController < ApplicationController
     else
       @shipments = []
     end
+
+    # Calculate shipment stats for bar chart
+    @total_shipments = @shipments.count
+    @in_transit_count = @shipments.where(status: Shipment::STATUS_VALUES["in_transit"]).count
+    @pending_count = @shipments.where(status: Shipment::STATUS_VALUES["pending"]).count
+    @delivered_count = @shipments.where(status: Shipment::STATUS_VALUES["delivered"]).count
   end
 
   def dashboard
@@ -32,11 +38,15 @@ class ShipmentsController < ApplicationController
       @delivery_partners = DeliveryPartner.all
     elsif current_user.customer? && current_user.customer.present?
       @shipments = Shipment.where(customer_id: current_user.customer.id)
+      @delivered_shipments = Shipment.where(customer_id: current_user.customer.id, status: Shipment::STATUS_VALUES["delivered"])
     elsif current_user.delivery_partner? && current_user.delivery_partner.present?
       @shipments = Shipment.where(delivery_partner_id: current_user.delivery_partner.id)
     else
       @shipments = []
     end
+
+    # Ensure @delivered_shipments is set to avoid nil error in view
+    @delivered_shipments ||= Shipment.none
 
     # Ensure @shipments is an ActiveRecord::Relation for chaining
     @shipments = Shipment.where(id: @shipments.map(&:id)) if @shipments.is_a?(Array)
@@ -59,8 +69,12 @@ class ShipmentsController < ApplicationController
   end
 
   def new
+    # Allow admin to create shipments
+    if current_user.admin?
+      @shipment = Shipment.new
+      @shipments = Shipment.all
     # Ensure current_user has a customer profile, or create one if missing
-    if current_user.customer.present?
+    elsif current_user.customer.present?
       @shipment = Shipment.new
       @shipments = Shipment.all
     elsif current_user.customer?
@@ -75,7 +89,14 @@ class ShipmentsController < ApplicationController
   end
 
   def create
-    if current_user.customer.present?
+    if current_user.admin?
+      @shipment = Shipment.new(shipment_params)
+      if @shipment.save
+        redirect_to @shipment, notice: "Shipment was successfully created."
+      else
+        render :new
+      end
+    elsif current_user.customer.present?
       @shipment = Shipment.new(shipment_params)
       @shipment.customer = current_user.customer
 
@@ -104,10 +125,16 @@ class ShipmentsController < ApplicationController
   def update
     @shipment = Shipment.find(params[:id])
     if current_user.admin?
-      if @shipment.update(shipment_params)
-        redirect_to request.referer || shipment_path(@shipment), notice: "Shipment was successfully updated."
+      # Use background job to update shipment status asynchronously
+      if shipment_params[:status].present?
+        ShipmentStatusUpdateJob.perform_later(@shipment.id, shipment_params[:status])
+        redirect_to request.referer || shipment_path(@shipment), notice: "Shipment status update is being processed."
       else
-        render :edit
+        if @shipment.update(shipment_params.except(:status))
+          redirect_to request.referer || shipment_path(@shipment), notice: "Shipment was successfully updated."
+        else
+          render :edit
+        end
       end
     elsif current_user.delivery_partner? && @shipment.delivery_partner_id == current_user.delivery_partner&.id
       # Allow delivery partner to update status only
@@ -161,6 +188,8 @@ class ShipmentsController < ApplicationController
   end
 
   def shipment_params
-    params.require(:shipment).permit(:source, :target, :item_details, :delivery_partner_id, :status)
+    permitted = [ :source, :target, :item_details, :delivery_partner_id, :status ]
+    permitted << :customer_id if current_user.admin?
+    params.require(:shipment).permit(permitted)
   end
 end

@@ -1,0 +1,59 @@
+/* Shipment details page styles */
+
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #c9d8e6 0%, #b9acc5 100%);
+  margin: 0;
+  padding: 2rem;
+  color: #333;
+}
+
+.container {
+  max-width: 600px;
+  margin: 4rem auto;
+  background-color: #181716;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  padding: 1rem;
+}
+
+h1 {
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 0.75rem 1rem;
+  border: 1px solid #a89f94;
+}
+
+th {
+  background-color: #b3a89f;
+  color: white;
+  font-weight: bold;
+  text-align: left;
+}
+
+td {
+  background-color: #d3c6b8;
+}
+
+.logout-link {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: #000;
+  text-decoration: none;
+  font-weight: 600;
+}

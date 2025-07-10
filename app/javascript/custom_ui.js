@@ -12,16 +12,28 @@ function showCreateForm() {
 }
 
 function trackShipment() {
-  // For demonstration, just alert or implement tracking UI toggle
+  
   alert('Track Shipment functionality is not yet implemented.');
 }
 
 function toggleRole() {
-  // For demonstration, just alert or implement role toggle logic
   alert('Role toggle functionality is not yet implemented.');
+}
+
+function toggleSidebar() {
+  const sidebar = document.querySelector('aside');
+  if (!sidebar) return;
+  if (sidebar.classList.contains('open')) {
+    sidebar.classList.remove('open');
+    sidebar.classList.add('closed');
+  } else {
+    sidebar.classList.remove('closed');
+    sidebar.classList.add('open');
+  }
 }
 
 // Export functions to global scope so they can be called from inline onclick handlers
 window.showCreateForm = showCreateForm;
 window.trackShipment = trackShipment;
 window.toggleRole = toggleRole;
+window.toggleSidebar = toggleSidebar;

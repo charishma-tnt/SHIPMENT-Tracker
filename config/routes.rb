@@ -1,7 +1,11 @@
+require "sidekiq/web"
+
 Rails.application.routes.draw do
   get "/admin", to: "admins#show", as: :admin
   post "/admin/assign_shipment", to: "admins#assign_shipment", as: :assign_shipment
   delete "/admin/destroy_shipment/:id", to: "admins#destroy_shipment", as: :destroy_shipment
+
+  mount Sidekiq::Web => "/sidekiq"
 
   root "shipments#dashboard"
   get "/role_selection", to: "role_selection#index"

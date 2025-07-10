@@ -42,7 +42,7 @@
         <div>
           <%= f.label :status, class: "form-label block text-sm font-medium text-gray-700" %>
           <%= f.select :status, 
-            Shipment.statuses.keys.map { |s| [s.humanize, s] }, 
+            Shipment::STATUS_VALUES.keys.map { |s| [s.humanize, Shipment::STATUS_VALUES[s]] }, 
             {}, 
             class: "form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" %>
         </div>

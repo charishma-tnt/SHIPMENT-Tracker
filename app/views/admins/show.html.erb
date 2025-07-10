@@ -1,99 +1,80 @@
-<h1>Admin Dashboard</h1>
+<h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Admin Dashboard</h1>
 
-<div class="mb-4">
-  <%= link_to "Create Shipment", new_shipment_path, class: "inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded" %>
+<div class="mb-6 text-center">
+  <%= link_to "Create Shipment", new_shipment_path, class: "inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded shadow" %>
 </div>
 
-<h2>List of Delivery Partners</h2>
-<table border="1" cellpadding="5" cellspacing="0">
-  <thead>
+<h2 class="text-2xl font-semibold mb-4 text-gray-700">List of Delivery Partners</h2>
+<table class="w-full border border-gray-300 rounded mb-8 shadow-sm">
+  <thead class="bg-gray-100">
     <tr>
-      <th>Name</th>
-      <th>Email</th>
+      <th class="border border-gray-300 px-4 py-2 text-left">Name</th>
+      <th class="border border-gray-300 px-4 py-2 text-left">Email</th>
     </tr>
   </thead>
   <tbody>
     <% @delivery_partners.each do |partner| %>
-      <tr>
-        <td><%= partner.name %></td>
-        <td><%= partner.email %></td>
+      <tr class="hover:bg-gray-50">
+        <td class="border border-gray-300 px-4 py-2"><%= partner.name %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= partner.email %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<h2>Pending Shipments</h2>
-<table border="1" cellpadding="5" cellspacing="0">
-  <thead>
+<h2 class="text-2xl font-semibold mb-4 text-gray-700">Pending Shipments</h2>
+<table class="w-full border border-gray-300 rounded mb-8 shadow-sm">
+  <thead class="bg-gray-100">
     <tr>
-      <th>Shipment ID</th>
-      <th>Source</th>
-      <th>Target</th>
-      <th>Assign / Actions</th>
+      <th class="border border-gray-300 px-4 py-2 text-left">Shipment ID</th>
+      <th class="border border-gray-300 px-4 py-2 text-left">Source</th>
+      <th class="border border-gray-300 px-4 py-2 text-left">Target</th>
+      <th class="border border-gray-300 px-4 py-2 text-left">Assign / Actions</th>
     </tr>
   </thead>
   <tbody>
     <% @pending_shipments.each do |shipment| %>
-      <tr>
-        <td><%= shipment.id %></td>
-        <td><%= shipment.source %></td>
-        <td><%= shipment.target %></td>
-        <td>
+      <tr class="hover:bg-gray-50">
+        <td class="border border-gray-300 px-4 py-2"><%= shipment.id %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= shipment.source %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= shipment.target %></td>
+        <td class="border border-gray-300 px-4 py-2">
           <%= form_with url: assign_shipment_path, method: :post, local: true do |f| %>
             <%= hidden_field_tag :shipment_id, shipment.id %>
-            <%= select_tag :delivery_partner_id, options_from_collection_for_select(@delivery_partners, :id, :name), prompt: "Assign to..." %>
-            <%= f.submit "Assign", class: "ml-2 px-2 py-1 bg-blue-600 text-white rounded" %>
+            <%= select_tag :delivery_partner_id, options_for_select([["None", ""]]) + options_from_collection_for_select(@delivery_partners, :id, :name), prompt: "Assign to...", required: true, class: "border border-gray-300 rounded px-2 py-1" %>
+            <%= f.submit "Assign", class: "ml-2 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700" %>
           <% end %>
           <br/>
-          <%= button_to "Delete", destroy_shipment_path(shipment), method: :delete, data: { confirm: "Are you sure?" }, class: "text-red-600" %>
+          <%= button_to "Delete", destroy_shipment_path(shipment), method: :delete, data: { confirm: "Are you sure?" }, class: "text-red-600 hover:text-red-800 mt-2" %>
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<h2>Updated Shipments</h2>
-<table border="1" cellpadding="5" cellspacing="0">
-  <thead>
+<h2 class="text-2xl font-semibold mb-4 text-gray-700">Updated Shipments</h2>
+<table class="w-full border border-gray-300 rounded mb-8 shadow-sm">
+  <thead class="bg-gray-100">
     <tr>
-      <th>Shipment ID</th>
-      <th>Source</th>
-      <th>Target</th>
-      <th>Status</th>
-      <th>Delivery Partner</th>
+      <th class="border border-gray-300 px-4 py-2 text-left">Shipment ID</th>
+      <th class="border border-gray-300 px-4 py-2 text-left">Source</th>
+      <th class="border border-gray-300 px-4 py-2 text-left">Target</th>
+      <th class="border border-gray-300 px-4 py-2 text-left">Status</th>
+      <th class="border border-gray-300 px-4 py-2 text-left">Delivery Partner</th>
     </tr>
   </thead>
   <tbody>
     <% @updated_shipments.each do |shipment| %>
-      <tr>
-        <td><%= shipment.id %></td>
-        <td><%= shipment.source %></td>
-        <td><%= shipment.target %></td>
-        <td><%= shipment.status_humanize %></td>
-        <td><%= shipment.delivery_partner&.name %></td>
+      <tr class="hover:bg-gray-50">
+        <td class="border border-gray-300 px-4 py-2"><%= shipment.id %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= shipment.source %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= shipment.target %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= shipment.status_humanize %></td>
+        <td class="border border-gray-300 px-4 py-2"><%= shipment.delivery_partner&.name %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-<style>
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-  }
-  th {
-    background-color:rgb(232, 225, 225);
-  }
-  tr:nth-child(even) {
-    background-color:rgb(210, 210, 204);
-  }
-  background-color:rgb(243, 208, 208);
-  }
-  </style>
-<div class="mt-6">
-  <%= button_to "Logout", destroy_user_session_path, method: :delete, class: "px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700" %>
-</div>
+
+<div class="mt-6 text-center">
+  <%= button_to "Logout", destroy_user_session_path, method: :delete, class: "px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700" %>

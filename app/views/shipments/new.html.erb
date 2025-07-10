@@ -1,16 +1,14 @@
-<div style="background-color: white; max-width: 400px; margin: 50px auto; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-  <h1 style="text-align: center; font-weight: 800; font-size: 24px; margin-bottom: 20px; color: green; font-family: Algerian;">
-    <img src="https://cdn-icons-png.flaticon.com/512/1055/1055685.png" alt="Shipment Icon" style="width: 75px; height: 75px; vertical-align: middle;">
-    CREATE A SHIPMENT
+<div class="max-w-4xl mx-auto p-8 bg-white rounded-lg shadow-md">
+  <h1 class="text-center font-extrabold text-2xl mb-6 text-green-700 uppercase tracking-wide" style="font-family: Algerian, serif;">
+    <%
+=begin%>
+ <img src="https://cdn-icons-png.flaticon.com/512/1055/1055685.png" alt="Box with upward arrow symbolizing shipment, simple flat design, neutral tone, no text" class="inline-block w-4 h-4 align-middle mr-2"> 
+<%
+=end%>
+    Create a Shipment
   </h1>
   <%= render 'form', shipment: @shipment %>
 </div>
-
-<style>
-  body {
-    background-color: beige;
-  }
-</style>
 
 
 
