@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shipment Tracker</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload", media: "all", href: asset_path("application.css") %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+  </head>
+
+  <body class="bg-gray-50 text-blue-900">
+    <div class="flex flex-col h-screen overflow-hidden bg-gray-50">
+      <header class="flex justify-end items-center bg-white shadow px-6 py-4">
+        <% if user_signed_in? %>
+          <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl">
+            <%= current_user.email.present? ? current_user.email.first.upcase : "" %>
+            <%# Alternatively, you can use a user icon SVG or font icon here instead of the letter %>
+            <%# Example: %>
+            <%# <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"> %>
+            <%#   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 1118.879 6.196 9 9 0 015.12 17.804z" /> %>
+            <%#   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /> %>
+            <%# </svg> %>
+            
+          </div>
+          <nav class="ml-4">
+            <%= link_to "Dashboard", dashboard_shipments_path, class: "mr-4" %>
+            <% if current_user.admin? %>
+              <%= link_to "Admin", admin_path, class: "mr-4" %>
+              <%= link_to "Delivery Partners", delivery_partners_path, class: "mr-4" %>
+              <%= link_to "Customers", customers_path, class: "mr-4" %>
+            <% elsif current_user.customer? %>
+              <%= link_to "My Shipments", shipments_path, class: "mr-4" %>
+            <% elsif current_user.delivery_partner? %>
+              <%= link_to "My Shipments", shipments_path, class: "mr-4" %>
+              <%= link_to "My Profile", delivery_partner_path(current_user.delivery_partner), class: "mr-4" %>
+            <% end %>
+<%= button_to "Logout", destroy_user_session_path, method: :delete, class: "text-red-600 bg-transparent border-none p-0 cursor-pointer", form: { data: { turbo: false } } %>
+          </nav>
+        <% else %>
+          <%= link_to "Login", new_user_session_path, class: "mr-4" %>
+          <%= link_to "Sign Up", new_user_registration_path %>
+        <% end %>
+      </header>
+      <main class="flex-1 overflow-auto">
+        <%= yield %>
+      </main>
+    </div>
+  </body>
+</html>

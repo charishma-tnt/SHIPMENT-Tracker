@@ -1,0 +1,77 @@
+@import "../../tailwind/application";
+@import "custom_auth";
+@import "app";
+
+h1:color {
+  color: #1d146d;
+}
+.navbar {
+  background: #f8f9fa;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-link {
+  color: #333;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+}
+yes
+.nav-button {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.role-selection {
+  margin: 2rem 0;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.button {
+  padding: 1rem 2rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.button-primary {
+  background: #03122322;
+  color: white;
+}
+
+.button-secondary {
+  background: #28a745;
+  color: white;
+}
+
+.alert {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
+
+.alert-success {
+  background: #d4edda;
+  color: #155724;
+}
+
+.alert-danger {
+  background: #f8d7da;
+  color: #721c24;
+}

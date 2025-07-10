@@ -1,0 +1,2 @@
+<%= turbo_stream.prepend "shipments", partial: "shipments/shipment", locals: { shipment: @shipment } %>
+<%= turbo_stream.update "new_shipment", "" %>  <%# Clear the form after submission %>

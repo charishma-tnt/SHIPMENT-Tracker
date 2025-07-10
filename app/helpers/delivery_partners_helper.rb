@@ -1,0 +1,2 @@
+module DeliveryPartnersHelper
+end

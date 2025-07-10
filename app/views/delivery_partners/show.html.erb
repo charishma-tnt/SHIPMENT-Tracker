@@ -1,0 +1,97 @@
+<div class="container mx-auto mt-8">
+  <h1 class="text-2xl font-bold mb-4 uppercase animate-bounce" style="font-family: algerian, sans-serif; color: maroon; animation: pulseText 2s infinite alternate; text-transform: uppercase;">Delivery Partner Dashboard</h1>
+
+  <h2 class="text-xl font-semibold mb-2 animate-fade-in" style="font-family: Arial, sans-serif; color: green; animation: fadeInUp 1.5s;">Assigned Shipments</h2>
+
+  <style>
+    @keyframes pulseText {
+      0% { text-shadow: 0 0 0 maroon; }
+      100% { text-shadow: 0 0 20px maroon; }
+    }
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fade-in {
+      animation: fadeInUp 1.5s;
+    }
+  </style>
+
+  <div id="shipments">
+    <% if @shipments.any? %>
+      <table class="w-full border-collapse bg-white shadow-md rounded">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="border px-4 py-2 text-left">Source</th>
+            <th class="border px-4 py-2 text-left">Target</th>
+            <th class="border px-4 py-2 text-left">Status</th>
+            <th class="border px-4 py-2 text-left">Item Details</th>
+            <th class="border px-4 py-2 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @shipments.each_with_index do |shipment, index| %>
+            <tr class="<%= index.even? ? 'bg-beige' : 'bg-gray-50' %> hover:bg-blue-50">
+              <td class="border px-4 py-2"><%= shipment.source %></td>
+              <td class="border px-4 py-2"><%= shipment.target %></td>
+              <td class="border px-4 py-2"><%= shipment.status_humanize %></td>
+              <td class="border px-4 py-2"><%= shipment.item_details %></td>
+              <td class="border px-4 py-2">
+                <%= form_with(model: shipment, url: shipment_path(shipment), method: :patch, local: true, class: "flex items-center gap-2") do |f| %>
+                  <%= f.select :status, Shipment::STATUS_VALUES.map { |k, v| [k.humanize, v] }, {}, class: "form-select px-2 py-1 border rounded" %>
+                  <%= f.submit "Update Status", class: "bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded" %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p class="bg-yellow-100 p-4 rounded">No shipments assigned to you yet.</p>
+    <% end %>
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th, td {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #ddd;
+      }
+      th {
+        background-color:rgb(132, 121, 121);
+      }
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+      tr:hover {
+        background-color: #e0f7fa;
+      }
+      .bg-black {
+        background-color: #000;
+      }
+      .bg-gray-50 {
+        background-color:rgb(168, 175, 181);
+      }
+      .bg-beige {
+        background-color: rgb(112, 136, 153);
+      }
+      .bg-blue-50 {
+        background-color: rgb(219, 234, 254);
+      }
+      .bg-yellow-100 {
+        background-color: rgb(255, 253, 231);
+      }
+      table {
+        font-family: Arial, sans-serif;
+      }
+    </style>
+  </div>
+</div>

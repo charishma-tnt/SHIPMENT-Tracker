@@ -1,0 +1,50 @@
+<div class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 via-white to-green-100">
+  <div class="bg-white rounded-xl shadow-lg p-10 w-full max-w-md text-center">
+    <h1 class="text-4xl font-extrabold text-blue-700 mb-6 tracking-tight">Shipment Tracker</h1>
+    <p class="mb-8 text-gray-600">Choose your role to continue</p>
+      <% if user_signed_in? %>
+      <div class="mb-6">
+        <div class="flex flex-col items-center mb-4">
+          <div class="w-16 h-16 rounded-full bg-blue-200 flex items-center justify-center text-blue-700 font-bold text-2xl mb-2">
+            <%= image_tag("https://ui-avatars.com/api/?name=#{current_user.email.first.upcase}", alt: "Profile", class: "rounded-full w-16 h-16") %>
+          </div>
+          <div>
+            <div class="font-semibold text-gray-800"><%= current_user.email %></div>
+            <div class="text-xs text-gray-500">
+              <% if current_user.customer? %>
+                Customer
+              <% elsif current_user.delivery_partner? %>
+                Delivery Partner
+              <% elsif current_user.admin? %>
+                Admin
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <%= button_to "Sign Out", destroy_user_session_path, method: :delete, form: { "data-turbo" => "false" }, class: "w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" %>
+      </div>
+      <nav class="mb-6 flex justify-center space-x-4">
+        <%= link_to "Shipments", shipments_path, class: "px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600" %>
+        <%= link_to "New Shipment", new_shipment_path, class: "px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600" %>
+      </nav>
+      <%= link_to "Go to Dashboard", root_path, class: "text-green-600 hover:underline" %>
+    <% else %>
+      <div class="space-y-6">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-700 mb-2">Sign Up</h2>
+          <div class="flex justify-center gap-4">
+            <%= link_to "As Customer", new_user_registration_path(role: "customer"), class: "px-6 py-2 rounded-lg bg-blue-500 hover:bg-blue-700 text-white font-semibold shadow transition" %>
+            <%= link_to "As Delivery Partner", new_user_registration_path(role: "delivery_partner"), class: "px-6 py-2 rounded-lg bg-green-500 hover:bg-green-700 text-white font-semibold shadow transition" %>
+          </div>
+        </div>
+        <div>
+          <h2 class="text-lg font-semibold text-gray-700 mb-2">Sign In</h2>
+          <div class="flex justify-center gap-4">
+            <%= link_to "As Customer", new_user_session_path(role: "customer"), class: "px-6 py-2 rounded-lg bg-blue-100 hover:bg-blue-300 text-blue-800 font-semibold shadow transition" %>
+            <%= link_to "As Delivery Partner", new_user_session_path(role: "delivery_partner"), class: "px-6 py-2 rounded-lg bg-green-100 hover:bg-green-300 text-green-800 font-semibold shadow transition" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

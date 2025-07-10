@@ -1,0 +1,99 @@
+<h1>Admin Dashboard</h1>
+
+<div class="mb-4">
+  <%= link_to "Create Shipment", new_shipment_path, class: "inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded" %>
+</div>
+
+<h2>List of Delivery Partners</h2>
+<table border="1" cellpadding="5" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @delivery_partners.each do |partner| %>
+      <tr>
+        <td><%= partner.name %></td>
+        <td><%= partner.email %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h2>Pending Shipments</h2>
+<table border="1" cellpadding="5" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Shipment ID</th>
+      <th>Source</th>
+      <th>Target</th>
+      <th>Assign / Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @pending_shipments.each do |shipment| %>
+      <tr>
+        <td><%= shipment.id %></td>
+        <td><%= shipment.source %></td>
+        <td><%= shipment.target %></td>
+        <td>
+          <%= form_with url: assign_shipment_path, method: :post, local: true do |f| %>
+            <%= hidden_field_tag :shipment_id, shipment.id %>
+            <%= select_tag :delivery_partner_id, options_from_collection_for_select(@delivery_partners, :id, :name), prompt: "Assign to..." %>
+            <%= f.submit "Assign", class: "ml-2 px-2 py-1 bg-blue-600 text-white rounded" %>
+          <% end %>
+          <br/>
+          <%= button_to "Delete", destroy_shipment_path(shipment), method: :delete, data: { confirm: "Are you sure?" }, class: "text-red-600" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h2>Updated Shipments</h2>
+<table border="1" cellpadding="5" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Shipment ID</th>
+      <th>Source</th>
+      <th>Target</th>
+      <th>Status</th>
+      <th>Delivery Partner</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @updated_shipments.each do |shipment| %>
+      <tr>
+        <td><%= shipment.id %></td>
+        <td><%= shipment.source %></td>
+        <td><%= shipment.target %></td>
+        <td><%= shipment.status_humanize %></td>
+        <td><%= shipment.delivery_partner&.name %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  th {
+    background-color:rgb(232, 225, 225);
+  }
+  tr:nth-child(even) {
+    background-color:rgb(210, 210, 204);
+  }
+  background-color:rgb(243, 208, 208);
+  }
+  </style>
+<div class="mt-6">
+  <%= button_to "Logout", destroy_user_session_path, method: :delete, class: "px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700" %>
+</div>

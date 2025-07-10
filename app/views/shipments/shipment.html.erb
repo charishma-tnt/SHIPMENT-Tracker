@@ -1,0 +1,12 @@
+<div id="shipment_<%= shipment.id %>">
+  <p>Source: <%= shipment.source %></p>
+  <p>Target: <%= shipment.target %></p>
+  <p>Status: <%= shipment.status %></p>
+  <% if current_user.admin? %>
+    <p>Delivery Partner: <%= shipment.delivery_partner&.name %></p>
+  <% end %>
+  <%= link_to "Show", shipment %> |
+  <%= link_to "Edit", edit_shipment_path(shipment) %> |
+  <%= link_to "Delete", shipment, data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+</div>
+  

@@ -1,0 +1,38 @@
+<style>
+  body {
+    background-color: beige;
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+
+<div style="background-color: black; max-width: 700px; max-height: 480px; padding: 20px; border-radius: 20px; color: white; box-shadow: 0 0 10px rgba(0,0,0,0.5); overflow-y: auto;">
+  <h2 style="text-align: center; font-weight: 800; font-size: 24px; margin-bottom: 20px;">Create your Shipment Tracker account</h2>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+    <div style="margin-bottom: 15px;">
+      <%= f.label :email, "Email address", style: "display: block; font-weight: 600; margin-bottom: 5px;" %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", style: "width: 80%; padding: 10px; border-radius: 5px; border: none;" %>
+    </div>
+    <div style="margin-bottom: 15px;">
+      <%= f.label :role, "Role", style: "display: block; font-weight: 600; margin-bottom: 5px;" %>
+      <%= f.select :role, options_for_select([["Admin", "admin"], ["Customer", "customer"], ["Delivery Partner", "delivery_partner"]]), {}, style: "width: 95%; padding: 10px; border-radius: 5px; border: none;" %>
+    </div>
+    <div style="margin-bottom: 15px;">
+      <%= f.label :password, style: "display: block; font-weight: 600; margin-bottom: 5px;" %>
+      <%= f.password_field :password, autocomplete: "new-password", style: "width: 90%; padding: 10px; border-radius: 5px; border: none;" %>
+    </div>
+    <div style="margin-bottom: 15px;">
+      <%= f.label :password_confirmation, "Confirm password", style: "display: block; font-weight: 600; margin-bottom: 5px;" %>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", style: "width: 90%; padding: 10px; border-radius: 5px; border: none;" %>
+    </div>
+    <div>
+      <%= f.submit "Sign up", style: "width: 90%; background-color: #22c55e; color: white; font-weight: bold; padding: 12px; border-radius: 8px; border: none; cursor: pointer;" %>
+    </div>
+  <% end %>
+  <div style="margin-top: 20px; text-align: center; font-size: 14px; color: #9ca3af;">
+    <p>Already have an account? <%= link_to "Sign in", new_session_path(resource_name), style: "color: #3b82f6; text-decoration: underline;" %></p>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<div id="<%= dom_id delivery_partner %>">
+   <p>
+    <strong>Name:</strong>
+    <%= delivery_partner.name %>
+   </p>
+
+    <p>
+    <strong>Email:</strong>
+    <%= delivery_partner.email %>
+    </p>
+    <p>
+        <strong>Address:</strong>
+        <%= delivery_partner.address %>
+    </p>
+
+    <%
+=begin%>
+ <p>
+    <strong>Phone:</strong>
+    <%= delivery_partner.phone.presence || "N/A" %>
+    </p> 
+<%
+=end%>
+    <div class="mt-4">
+      <%= button_to "Sign Out", destroy_user_session_path, method: :delete, data: { turbo: true }, class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" %>
+</div>
+</div>

@@ -1,0 +1,11 @@
+<% content_for :buttons do %>
+  <div class="fixed bottom-4 right-4 space-y-2">
+    <% if user_signed_in? %>
+      <% if current_user.customer? %>
+        <%= link_to new_shipment_path, class: "flex items-center justify-center w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700" do %>
+          <span class="text-2xl">+</span>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

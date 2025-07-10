@@ -1,0 +1,17 @@
+<%
+=begin%>
+ <h1>Shipment Status Update</h1>
+
+<p>Your shipment #<%= @shipment.id %> has been updated.</p>
+
+<p>Current status: <%= @shipment.status.humanize %></p>
+
+<p>Shipment details:</p>
+<ul>
+  <li>From: <%= @shipment.source %></li>
+  <li>To: <%= @shipment.target %></li>
+  <li>Item details: <%= @shipment.item_details %></li>
+  <li>Delivery Partner: <%= @shipment.delivery_partner&.name || 'Not assigned' %></li>
+</ul> 
+<%
+=end%>

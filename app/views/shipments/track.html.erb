@@ -1,0 +1,33 @@
+<h1 class="text-2xl font-bold mb-4">Track Shipment</h1>
+
+<%= render "tracking_form" %>
+
+<% if @shipment %>
+  <h2 class="text-xl font-semibold mt-6 mb-2">Shipment Details</h2>
+  <table class="min-w-[400px] bg-gray-50 rounded-md shadow-md text-center">
+    <tbody>
+      <tr>
+        <th class="py-2 px-4 text-left text-gray-700">Shipment ID</th>
+        <td class="py-2 px-4"><%= @shipment.id %></td>
+      </tr>
+      <tr>
+        <th class="py-2 px-4 text-left text-gray-700">Source</th>
+        <td class="py-2 px-4"><%= @shipment.source %></td>
+      </tr>
+      <tr>
+        <th class="py-2 px-4 text-left text-gray-700">Destination</th>
+        <td class="py-2 px-4"><%= @shipment.target %></td>
+      </tr>
+      <tr>
+        <th class="py-2 px-4 text-left text-gray-700">Item Details</th>
+        <td class="py-2 px-4"><%= @shipment.item_details %></td>
+      </tr>
+      <tr>
+        <th class="py-2 px-4 text-left text-gray-700">Status</th>
+        <td class="py-2 px-4"><%= Shipment::STATUS_VALUES.key(@shipment.status).to_s.humanize rescue @shipment.status.to_s.humanize %></td>
+      </tr>
+    </tbody>
+  </table>
+<% elsif params[:tracking_id].present? %>
+  <%# Removed the "No shipment found" message as per user request %>
+<% end %>

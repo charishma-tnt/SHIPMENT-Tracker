@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom component styles */
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-duration: 150ms;
+  }
+  .btn-primary {
+    background-color: #1a1a1a;
+    color: #fff;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+  .btn-primary:hover {
+    background-color: #01061315;
+  }
+  .btn-secondary {
+    background-color: #16a34a;
+    color: #fff;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+  .btn-secondary:hover {
+    background-color: #15803d;
+  }
+  .btn-danger {
+    background-color: #dc2626;
+    color: #fff;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+  .btn-danger:hover {
+    background-color: #b91c1c;
+  }
+  .card {
+    background-color: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+  }
+  .form-input {
+    width: 100%;
+    border-radius: 0.5rem;
+    border: 1px solid #d1d5db;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+  .form-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 1px #3b82f6;
+    outline: none;
+  }
+  .form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.25rem;
+  }
+  .animate-fade-in {
+    transition-property: opacity;
+    transition-duration: 500ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .animate-slide-up {
+    transition-property: all;
+    transition-duration: 500ms;
+    transition-timing-function: ease-in-out;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,90 @@
+<%
+=begin%>
+ <div class="min-h-screen bg-gray-100">
+  <header class="bg-white shadow-md py-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">Shipment Tracker</h1>
+        <p class="text-sm text-gray-600">IOT traceability solutions for customers and delivery partners</p>
+      </div>
+      <nav class="flex items-center space-x-4">
+        <%= link_to "Home", root_path, class: "text-gray-800 hover:text-gray-600" %>
+        <% unless user_signed_in? %>
+          <% unless current_user&.admin? %>
+            <%= link_to "Sign Up", new_user_registration_path, class: "text-blue-500 hover:text-blue-700" %>
+          <% end %>
+          <%= link_to "Sign In", new_user_session_path, class: "text-green-500 hover:text-green-700" %>
+        <% else %>
+          <% if current_user.admin? %>
+            <%= link_to "Admin Dashboard", admin_path, class: "text-gray-800 hover:text-gray-600" %>
+          <% elsif current_user.delivery_partner? %>
+            <%= link_to "Delivery Partner", delivery_partner_path(current_user.delivery_partner), class: "text-gray-800 hover:text-gray-600" %>
+          <% end %>
+          <%= link_to "Shipments", shipments_path, class: "text-gray-800 hover:text-gray-600" %>
+        <% end %>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container mx-auto py-8">
+    <div class="text-center">
+      <h2 class="text-3xl font-semibold text-gray-700 mb-4">Welcome to Shipment Tracker</h2>
+      <p class="text-gray-600">Your one-stop solution for managing and tracking shipments.</p>
+    </div>
+
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="p-4 border rounded-md">
+        <h3 class="text-xl font-semibold text-gray-700 mb-2">Customer</h3>
+        <p class="text-gray-600">Customers can sign up, log in, create shipments, and track their shipments.</p>
+        <% if user_signed_in? && current_user.customer? %>
+          <%= link_to "View Shipments", shipments_path, class: "block mt-4 bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded" %>
+        <% else %>
+          <p>Not a customer or not signed in.</p>
+        <% end %>
+
+        <div class="mt-6">
+          <h4 class="text-lg font-semibold mb-2">Track Shipment by ID</h4>
+          <%= form_with url: track_shipments_path, method: :get, local: true do |f| %>
+            <div class="flex space-x-2">
+              <%= f.text_field :tracking_id, placeholder: "Enter Shipment ID", class: "flex-grow border border-gray-300 rounded px-3 py-2" %>
+              <%= f.submit "Track", class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="p-4 border rounded-md">
+        <h3 class="text-xl font-semibold text-gray-700 mb-2">Delivery Partner</h3>
+        <p class="text-gray-600">Delivery partners can log in, view assigned shipments, and update shipment status.</p>
+        <% if user_signed_in? && current_user.delivery_partner? %>
+          <%= link_to "View Assigned Shipments", delivery_partner_path(current_user.delivery_partner), class: "block mt-4 bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded" %>
+        <% else %>
+          <p>Not a delivery partner or not signed in.</p>
+        <% end %>
+      </div>
+
+      <div class="p-4 border rounded-md">
+        <h3 class="text-xl font-semibold text-gray-700 mb-2">Admin</h3>
+        <p class="text-gray-600">Admins can onboard/offboard users and assign shipments.</p>
+        <% if user_signed_in? && current_user.admin? %>
+          <%= link_to "Admin Dashboard", admin_path, class: "block mt-4 bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded" %>
+        <% else %>
+          <p>Not an admin or not signed in.</p>
+        <% end %>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-gray-200 py-4">
+    <div class="container mx-auto text-center">
+      <p>Follow us on:</p>
+      <div class="flex justify-center space-x-4">
+        <a href="#" class="text-blue-500 hover:text-blue-700">Linkedin</a>
+        <a href="#" class="text-blue-500 hover:text-blue-700">Twitter</a>
+        <a href="#" class="text-blue-500 hover:text-blue-700">Instagram</a>
+      </div>
+    </div>
+  </footer>
+</div> 
+<%
+=end%>

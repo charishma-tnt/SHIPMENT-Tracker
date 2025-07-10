@@ -1,0 +1,79 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-6">
+  <!-- Sidebar: Vertical menu -->
+  <%
+=begin%>
+ <nav class="flex flex-col space-y-4 w-48 bg-white p-4 rounded shadow">
+    <%= link_to "Dashboard", shipments_path, class: "text-blue-700 font-semibold hover:text-blue-900" %>
+    <%= link_to "Create Shipment", new_shipment_path, class: "text-blue-700 font-semibold hover:text-blue-900" %> 
+<%
+=end%>
+    <!-- Add other menu items here if needed -->
+  </nav>
+
+  <!-- Main content: Overview -->
+  <div class="flex-1 bg-white p-6 rounded shadow overflow-x-auto">
+    <% if flash[:notice] %>
+      <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
+        <p><%= flash[:notice] %></p>
+      </div>
+    <% end %>
+    <% if flash[:alert] %>
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+        <p><%= flash[:alert] %></p>
+      </div>
+    <% end %>
+    <!-- Header and New Shipment Button -->
+    <div class="flex justify-between items-center py-6">
+   <h1> 
+  <img src="https://cdn-icons-png.flaticon.com/512/2921/2921823.png" alt="Box Logo" style="width: 50px; height: 50px; vertical-align: middle; text-align: center">
+
+      List of Shipments</h1>
+      <%
+=begin%>
+ <%= link_to "New Shipment", new_shipment_path, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700" %> 
+<%
+=end%>
+    </div>
+
+    <!-- Shipments Table -->
+    <table class="min-w-full divide-y divide-gray-200 border border-black" style="border-collapse: collapse;">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-black">Shipment ID</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-black">Source</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-black">Target</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-black">Status</th>
+          <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider border border-black">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody class="bg-white divide-y divide-gray-200">
+        <% @shipments.each do |shipment| %>
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= shipment.id %></td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= shipment.source %></td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= shipment.target %></td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= shipment.status_humanize %></td>
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+              <%= link_to "Show", shipment_path(shipment), class: "text-indigo-600 hover:text-indigo-900" %>
+              <% unless current_user.delivery_partner? %>
+                <%= link_to "Edit", edit_shipment_path(shipment), class: "text-yellow-600 hover:text-yellow-900" %>
+                <%= link_to "Destroy", shipment_path(shipment), method: :delete, data: { confirm: "Are you sure?" }, class: "text-red-600 hover:text-red-900" %>
+              <% end %>
+
+              <% if current_user.delivery_partner? && shipment.status == Shipment::STATUS_VALUES["pending"] %>
+                <%= button_to accept_delivery_shipment_path(shipment), method: :post, class: "ml-2 text-green-600 hover:text-green-900" do %>
+                  Pick Up
+                <% end %>
+                <%= button_to decline_delivery_shipment_path(shipment), method: :post, class: "ml-2 text-red-600 hover:text-red-900" do %>
+                  Decline
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+  </div>
+</div>

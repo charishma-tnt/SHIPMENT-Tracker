@@ -1,0 +1,30 @@
+<!-- filepath: /Users/charishma/shipmenttracker/app/views/shared/_navbar.html.erb -->
+<nav class="bg-white shadow">
+  <div class="container mx-auto px-6 py-3">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <%= link_to root_path, class: "text-xl font-bold text-gray-800" do %>
+          📦 Shipment Tracker
+        <% end %>
+      </div>
+      
+      <div class="flex items-center space-x-4">
+        <% if user_signed_in? %>
+          <%= link_to "Shipments", shipments_path, class: "px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100" %>
+          
+          <div class="relative" data-controller="dropdown">
+            <button class="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100">
+              <%= current_user.email %>
+              <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            
+            <div class="absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5" role="menu">
+              <%= link_to "Profile", edit_user_registration_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+              <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</nav>

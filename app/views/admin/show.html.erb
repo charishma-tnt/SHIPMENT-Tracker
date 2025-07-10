@@ -1,0 +1,52 @@
+<div class="container mx-auto mt-8">
+  <h1 class="text-2xl font-bold mb-4">Admin Dashboard</h1>
+
+  <section class="mb-8">
+    <h2 class="text-m font-semibold mb-2">Customers</h2>
+    <ul>
+      <% @customers.each do |customer| %>
+        <li><%= customer.email %></li>
+      <% end %>
+    </ul>
+    <p>Total Customers: <%= @customers.count %></p>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-m font-semibold mb-2">Delivery Partners</h2>
+    <ul>
+      <% @delivery_partners.each do |delivery_partner| %>
+        <li><%= delivery_partner.email %></li>
+      <% end %>
+    </ul>
+    <p>Total Delivery Partners: <%= @delivery_partners.count %></p>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-m font-semibold mb-2">Shipments</h2>
+    <ul>
+      <% @shipments.each do |shipment| %>
+        <li>Shipment #<%= shipment.id %> (Status: <%= shipment.status %>)</li>
+      <% end %>
+    </ul>
+    <p>Total Shipments: <%= @shipments.count %></p>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-m font-semibold mb-2">Pending Shipments</h2>
+    <ul>
+      <% @pending_shipments.each do |shipment| %>
+        <li class="mb-4">
+          <div>Shipment #<%= shipment.id %> (Customer: <%= shipment.customer.email %>)</div>
+          <div>
+            <%= form_with url: assign_shipment_admin_path, method: :post, local: true do |f| %>
+              <%= hidden_field_tag :shipment_id, shipment.id %>
+              <%= select_tag :delivery_partner_id, options_from_collection_for_select(@delivery_partners, :id, :email), prompt: "Select Delivery Partner" %>
+              <%= f.submit "Assign", class: "ml-2 bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700" %>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+    <p>Total Pending Shipments: <%= @pending_shipments.count %></p>
+  </section>
+</div>

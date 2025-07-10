@@ -1,0 +1,255 @@
+<div class="max-w-2xl mx-auto">
+  <div class="card p-4 bg-white rounded-lg shadow-md" style="max-height: 550px;">
+    <%= form_with(model: shipment, local: true, class: "space-y-4") do |f| %>
+      <div class="space-y-3">
+        <div class="border rounded p-3 mb-3 shadow-sm" style="background:rgba(250, 253, 255, 0.96);">
+          <h2 class="text-2xl font-semibold mb-2 text-gray-800"></h2>
+          <p class="text-brown-600 mb-2" text_align="center" style="font-size: 1.1rem; font-weight: 500;">
+            <img src="https://cdn-icons-png.flaticon.com/512/2921/2921824.png" alt="Box Logo" style="width: 40px; height: 40px; vertical-align: middle;text-align: center">
+            Please fill in the details below to create a new shipment.
+          </p>
+        </div>
+        <div class="p-2 bg-gray-50 rounded-md">
+          <p style="margin-bottom: 1rem;">
+            <strong style="color:rgb(62, 4, 4);">Source</strong>
+            <%= f.label :-, class: "form-label block text-sm font-medium text-gray-1500" %>
+            <%= f.text_field :source, class: "form-input mt-1 block w-32 rounded-md border-maroon-900 shadow-sm focus:border-black-500 focus:ring focus:ring-white-200 focus:ring-opacity-50", required: true %>
+          </p>
+        </div>
+      </div>
+      <div class="p-2 bg-gray-50 rounded-md div1">
+        <p style="margin-bottom: 1rem;">
+          <strong style="color:rgb(62, 4, 4);">Destination</strong>
+          <%= f.label :-, class: "form-label block text-sm font-medium text-gray-700" %>
+          <%= f.text_field :target, class: "form-input mt-1 block w-0.25 rounded-md border-gray-300 shadow-sm focus:border-white-500 focus:ring focus:ring-white-200 focus:ring-opacity-30", required: true %>
+        </p>
+      </div>
+      <div class="p-2 bg-gray-50 rounded-md">
+        <p style="margin-bottom: 1rem;">
+          <strong style="color:rgb(62, 4, 4);">Item details</strong>
+          <%= f.label :-, class: "form-label block text-sm font-medium text-gray-700" %>
+          <%= f.text_area :item_details, rows: 2, class: "form-input mt-1 block w-0.5 rounded-md border-gray-300 shadow-sm focus:border-white-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50", required: true %>
+        </p>
+      </div>
+      <% if current_user.admin? %>
+        <div>
+          <%= f.label :delivery_partner_id, class: "form-label block text-sm font-medium text-gray-700" %>
+          <%= f.collection_select :delivery_partner_id, 
+            DeliveryPartner.all, :id, :name, 
+            {}, 
+            class: "form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" %>
+        </div>
+        <div>
+          <%= f.label :status, class: "form-label block text-sm font-medium text-gray-700" %>
+          <%= f.select :status, 
+            Shipment.statuses.keys.map { |s| [s.humanize, s] }, 
+            {}, 
+            class: "form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" %>
+        </div>
+      <% end %>
+      <div class="flex justify-end space-x-4 pt-4 border-t border-gray-200">
+        <%= link_to "Cancel", shipments_path, class: "btn bg-gray-100 text-gray-700 hover:bg-gray-200" %>
+        <%= f.submit "Create Shipment", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+<style>
+body {
+  background-color: #f5f5dc; /* Beige background */
+}
+.tracking-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+  background-color: #ffffff; /* White background */
+  border-radius: 0.375rem; /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+.tracking-form .field {
+  margin-bottom: 1rem; /* Space between fields */
+}
+.tracking-form .field label {
+  display: block; /* Block display for label */
+  margin-bottom: 0.5rem; /* Space below label */
+  font-weight: 500; /* Medium font weight */
+  color: #374151; /* Dark gray text */
+}
+ /* Light gray background */
+  }
+  .card {
+    background-color: #ffffff; /* White card background */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+  .btn {
+    background-color: #2563eb; /* Blue button */
+    color: #ffffff; /* White text */
+    padding: 0.5rem 1rem; /* Padding for button */
+    border-radius: 0.375rem; /* Rounded corners */
+    text-decoration: none; 
+  }
+  .btn:hover {
+    background-color: #1d4ed8; 
+  }
+  .btn.bg-gray-100 {
+    background-color: #f3f4f6; 
+    color: #374151; 
+  }
+  .btn.bg-gray-100:hover {
+    background-color: #e5e7eb; 
+  }
+  .form-input {
+    border: 1px solid #d1d5db; /* Light gray border */
+    border-radius: 0.375rem; /* Rounded corners */
+    padding: 0.5rem; /* Padding for input */
+    width: 100%; /* Full width */
+  }
+  .form-input:focus {
+    border-color: #2563eb; /* Blue border on focus */
+    box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.5); /* Blue shadow on focus */
+  }
+  .form-label {
+    font-weight: 500; /* Medium font weight */
+    color: #374151; /* Dark gray text */
+  }
+  .bg-gray-50 {
+    background-color: #f9fafb; /* Light gray background */
+  }
+  .rounded-md {
+    border-radius: 0.375rem; /* Rounded corners */
+  }
+  .shadow-sm {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  }
+  .space-y-6 > * + * {
+    margin-top: 1.5rem; /* Space between elements */
+  }
+  .space-y-4 > * + * {
+    margin-top: 1rem; /* Space between elements */
+  }
+  .text-gray-800 {
+    color: #1f2937; /* Dark gray text */
+  }
+  .text-brown-600 {
+    color: #7c4d00; /* Brown text */
+  }
+  .text-blue-600 {
+    color: #2563eb; /* Blue text */
+  }
+  .text-gray-700 {
+    color: #374151; /* Dark gray text */
+  }
+  .text-gray-500 {
+    color: #6b7280; /* Medium gray text */
+  }
+  .text-sm {
+    font-size: 0.875rem; /* Small text */
+  }
+  .text-lg {
+    font-size: 1.125rem; /* Large text */
+  }
+  .text-2xl {
+    font-size: 1.5rem; /* Extra large text */
+  }
+  .text-3xl {
+    font-size: 1.875rem; /* 3XL text */
+  }
+  .font-semibold {
+    font-weight: 600; /* Semi-bold font weight */
+  }
+  .font-medium {
+    font-weight: 500; /* Medium font weight */
+  }
+  .font-bold {
+    font-weight: 700; /* Bold font weight */
+  }
+  .font-extrabold {
+    font-weight: 800; /* Extra bold font weight */
+  }
+  .mb-4 {
+    margin-bottom: 1rem; /* Margin bottom */
+  }
+  .mb-6 {
+    margin-bottom: 1.5rem; /* Margin bottom */
+  }
+  .mt-1 {
+    margin-top: 0.25rem; /* Margin top */
+  }
+  .mt-6 {
+    margin-top: 1.5rem; /* Margin top */
+  }
+  .pt-6 {
+    padding-top: 1.5rem; /* Padding top */
+  }
+  .border {
+    border-width: 1px; /* Border width */
+  }
+  .border-gray-200 {
+    border-color: #e5e7eb; /* Light gray border */
+  }
+  .border-gray-300 {
+    border-color: #d1d5db; /* Medium gray border */
+  }
+  .border-t {
+    border-top-width: 1px; /* Top border width */
+  }
+  .border-b {
+    border-bottom-width: 0.5px; /* Bottom border width */
+  }
+  .rounded-lg {
+    border-radius: 0.5rem; /* Large rounded corners */
+  }
+  .rounded-md {
+    border-radius: 0.375rem; /* Medium rounded corners */
+  }
+  .shadow-md {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Medium shadow */
+  }
+  .shadow-sm {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Small shadow */
+  }
+  .bg-white {
+    background-color: #ffffff; /* White background */
+  }
+  .bg-blue-600 {
+    background-color: #2563eb; /* Blue background */
+  }
+  .bg-blue-700 {
+    background-color: #1d4ed8; /* Darker blue background */
+  }
+  .bg-gray-100 {
+    background-color: #f3f4f6; /* Light gray background */
+  }
+  .bg-gray-200 {
+    background-color: #e5e7eb; /* Medium gray background */
+  }
+  .bg-gray-50 {
+    background-color: #f9fafb; /* Very light gray background */
+  }
+  .hover\:bg-gray-200:hover {
+    background-color: #e5e7eb; /* Darker gray on hover */
+  }
+  .text-gray-600 {
+    color: #4b5563; /* Medium gray text */
+  }
+  .text-gray-900 {
+    color: #1a202c; /* Dark gray text */
+  }
+  /* Center the form content */
+  .centered-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #fdf6e3 0%, #e0e7ff 100%);
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.08);
+    margin: 2rem auto;
+    max-width: 600px;
+  }
+  .centered-form .form-input,
+  .centered-form textarea {
+    background: #fffdfa;
+    border: 1px solid #e0e7ff;
+  }
